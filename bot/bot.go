@@ -14,9 +14,22 @@ var (
 			Name:        "ping",
 			Description: "Ping the bot",
 		},
+		{
+			Name:        "ping-with-option",
+			Description: "Ping the bot with an option",
+			Options: []*discordgo.ApplicationCommandOption{
+				{
+					Type:        discordgo.ApplicationCommandOptionString,
+					Name:        "string-option",
+					Description: "A placeholder string option",
+					Required:    true,
+				},
+			},
+		},
 	}
 
 	CommandHandlers = map[string]func(s *discordgo.Session, i *discordgo.InteractionCreate){
-		"ping": Ping,
+		"ping":             Ping,
+		"ping-with-option": PingWithOption,
 	}
 )
