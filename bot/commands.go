@@ -15,7 +15,7 @@ func Ping(s *discordgo.Session, i *discordgo.InteractionCreate) {
 	})
 }
 
-func PingWithOption(s *discordgo.Session, i *discordgo.InteractionCreate) {
+func CommandWithOptions(s *discordgo.Session, i *discordgo.InteractionCreate) {
 	// Access options in the order provided by the user.
 	options := i.ApplicationCommandData().Options
 
@@ -37,6 +37,36 @@ func PingWithOption(s *discordgo.Session, i *discordgo.InteractionCreate) {
 		// Discordgo provides utility functions to make this simple.
 		margs = append(margs, option.StringValue())
 		msgformat += "> string-option: %s\n"
+	}
+
+	if opt, ok := optionMap["integer-option"]; ok {
+		margs = append(margs, opt.IntValue())
+		msgformat += "> integer-option: %d\n"
+	}
+
+	if opt, ok := optionMap["number-option"]; ok {
+		margs = append(margs, opt.FloatValue())
+		msgformat += "> number-option: %f\n"
+	}
+
+	if opt, ok := optionMap["bool-option"]; ok {
+		margs = append(margs, opt.BoolValue())
+		msgformat += "> bool-option: %v\n"
+	}
+
+	if opt, ok := optionMap["channel-option"]; ok {
+		margs = append(margs, opt.ChannelValue(nil).ID)
+		msgformat += "> channel-option: <#%s>\n"
+	}
+
+	if opt, ok := optionMap["user-option"]; ok {
+		margs = append(margs, opt.UserValue(nil).ID)
+		msgformat += "> user-option: <@%s>\n"
+	}
+
+	if opt, ok := optionMap["role-option"]; ok {
+		margs = append(margs, opt.RoleValue(nil, "").ID)
+		msgformat += "> role-option: <@&%s>\n"
 	}
 
 	// Send the response
